@@ -1,0 +1,42 @@
+// Example program
+#include <iostream>
+#include <string>
+#include <cmath>
+#define TOL 0.01
+using namespace std;
+double f(double x){
+    return x*x*x - 2*x +1;
+    
+    }
+int main()
+{
+  double a = -10, b = 20;
+  
+  if (f(a)*f(b) >= 0){
+      cout<<"a and b is not correct!!!"<<endl;
+      }
+  
+  double c = a;
+  
+  while((b-a) >= TOL){
+      
+      c = (a+b)/2;
+      
+      
+      if(f(c) == 0.0){
+          break;
+          }
+      
+      else if(f(a) * f(c) < 0){
+          b = c;
+          }       
+         
+      else {
+          a = c;
+          }     
+          
+      }
+   
+   cout<<c;  
+   return 0;   
+}

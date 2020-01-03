@@ -1,0 +1,38 @@
+// Example program
+#include <iostream>
+#include <string>
+#include <cmath>
+using namespace std;
+int main()
+{
+  int N = 20, a = 1, b = 3;
+  double f[N+1], x[N+1], fexp, s = 0.0, M2, max = 0;
+  double h = (double)(b-a)/N;
+  
+  for (int i=0; i<=N; i++){
+      x[i] = a + h * i;
+      }
+   
+   for (int i=0; i<=N; i++){
+       f[i] =  exp(x[i]) * x[i];
+       }
+    
+   for (int i=0; i<N; i++){
+       s = s + h*(f[i] + f[i+1])/2; 
+       }  
+       
+  fexp = (b-1)*exp(b) - (a-1)*exp(a);
+  for (int i=0; i<=N; i++){
+      M2 = (a + i*h + 2)*exp(a+i*h);
+      if(max < M2){
+        max = M2;
+      }
+      
+      }
+       
+   
+  cout<<fabs(s - fexp)<<" <= "<<max*h*h*h*N/12<<endl;
+        
+  
+}
+

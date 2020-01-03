@@ -1,0 +1,100 @@
+// Example program
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <fstream>
+#include <iomanip>
+using namespace std;
+int main()
+{
+  ofstream file("123.xls");
+  file.is_open();
+  float cp = 0.7, k = 1.5;
+  int N = 10, M = 10, l = 2, tmax = 3, m = 2;
+  
+  float dy = (float)m/(M-1), dx = (float)l/(N-1), dt = (float)tmax/(2*N-2);
+  
+  float x[N+1], t[2*N + 2], y[M+1], Y[N+1][M+1][2*N+2], F[N+1][M+1], F1[N+1][M+1] ;
+  float A, B, C, A1, B1, C1, alpha[N+1], beta[N+1], alpha1[M+1], beta1[M+1];
+  
+  for(int i = 0; i < N; i++){
+      x[i] = i*dx;
+      }
+      
+  for(int j=0; j < M; j++){
+      y[j] = j*dy;
+      }
+      
+  for (int n = 0; n < (2*N); n++){
+      t[n] = dt*n;
+      }
+      
+  A = (float)(k*dt)/(dx*dx*cp);
+  C = A;
+  B = A + C + 1;
+  A1 = (float)(k*dt)/(cp * dy*dy);
+  C1 = A1;
+  B1 = A1 + C1 + 1;
+  
+  alpha[N-1] = 1;
+  beta[N-1] = 0;
+  alpha1[M-1] = 1;
+  beta[M-1] = 0;
+  
+  for (int n = 0; n <= (2*N - 2); n++){
+      for (int i=0; i<N; i++){
+          for (int j=0; j<M; j++){
+              Y[i][j][0] = sin(x[i]) + cos(y[i]);
+              F[i][j] = Y[i][j][0];
+              F1[i][j] = Y[i][j][0];
+              }
+          }
+            
+      for (int j=0; j<M; j++){
+          Y[0][j][n+1] = 2 - y[j];
+          }
+          
+      for (int i=N-1; i!=0; i--){
+          for (int j=0; j<M; j++){
+            alpha[i-1] = C/(B - A*alpha[i]);
+            beta[i-1] = (A*beta[i] + F[i][j])/(B - A*alpha[i]);
+            }
+          }
+      for (int i=0; i<N; i++){
+          for (int j=0; j<M; j++){
+              Y[i+1][j][n+1] = alpha[i]*Y[i][j][n+1] + beta[i];
+              F[i][j] = (k*dt)*(Y[i][j+1][n] - 2*Y[i][j][n] + Y[i][j-1][n])/(dx*dx*dy*dy*cp) + Y[i][j][n];
+              }
+          }  
+          
+      for (int j = M-1; j!=0; j--){
+          for (int i=0; i<N; i++){
+              alpha1[j-1] = C1/(B1 - A1*alpha[i]);
+              beta1[j-1] = (A1*beta1[j] + F1[i][j])/(B1 - A1*alpha1[j]);
+              }
+          }
+          
+      for(int i=0; i<N; i++){
+          Y[i][0][n+2] =  sin(x[i]);
+          }
+      for (int i=0; i<N; i++){
+          for (int j=0; j<M; j++){
+              Y[i][j+1][n+2] = alpha1[j]*Y[i][j][n+2] + beta[j];
+              F1[i][j] = (k*dt)*(Y[i+1][j][n+1] - 2*Y[i][j][n+1] + Y[i-1][j][n+1])/(cp*dy*dy*dx*dx) + Y[i][j][n+1];
+              }
+          }
+      }
+      
+    for (int n = 0; n<(2*N); n++){
+    	for(int j=0; j<M; j++){
+    		for(int i=0; i<N; i++){
+    		    file<<fixed<<Y[i][j][n]<<"\t";
+    			
+			}
+			file<<"\n";
+		}
+		file<<"\n";
+	}
+
+	file.close();
+}

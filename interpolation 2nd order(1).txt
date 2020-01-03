@@ -1,0 +1,49 @@
+// Example program
+#include <iostream>
+#include <cmath>
+using namespace std;
+int main()
+{
+  int N = 5, a = 1, b = 5;
+  float h = 1, k = 4;
+  float f[N+1], x[N+1], f0[N+1], x0[N+1], n[N+1], A[N+1], B[N+1], C[N+1];
+  
+  for (int i=0; i<N; i++){
+      x[i] = a + h*i;
+      }
+      
+  for (int i=0; i<N; i++){
+      f[i] = x[i]*x[i]*x[i];
+      }
+      
+  for (int i=0; i<N; i++){
+      x0[i] = x[i] + h/2 + h/k;
+      }
+      
+  for (int i=0; i<N; i++){
+      f0[i] = x0[i]*x0[i]*x0[i];
+      }
+      
+  for(int i=0; i<N; i++){
+      A[i] = (x[i]+h/2)*(x[i]+h/2)*(x[i]+h/2);
+      B[i] = (f[i+1] - f[i])/h;
+      C[i] = 4*(f[i+1] + f[i] - 2*A[i])/(h*h);
+      } 
+      
+  for (int i=0; i<N; i++){
+      n[i] = A[i] + B[i]*(h/k) + C[i]*(h*h/(k*k))/2;
+      }
+      
+  for (int i=0; i<N; i++){
+      cout<<fabs(f[i] - f[i])<<endl;
+      cout<<fabs(n[i] - f0[i])<<endl;
+      }
+     
+ /* for (int i=0; i<N; i++){
+      cout<<f[i]<<endl;
+      cout<<n[i]<<endl;
+      }*/
+      
+  
+  
+}

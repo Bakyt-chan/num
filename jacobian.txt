@@ -1,0 +1,56 @@
+// Example program
+#include <iostream>
+#include <string>
+#include <math.h>
+#define MAXSIZE 200
+using namespace std;
+int main()
+{
+  int n, maxitr;
+  
+  cin>>n>>maxitr;
+  
+  double a[n][MAXSIZE], b[n], x[n], tol;
+  cin>>tol;
+  for (int i=0; i<n; i++){
+      for (int j=0; j<n; j++){
+          cin>>a[i][j];
+          }
+      }
+      
+  for (int i=0; i<n; i++){
+      cin>>b[i];
+      }
+   int flag = 0;
+   bool tolcheck = true;
+   double xod[MAXSIZE];
+   double sum;
+   
+   for (int i=0; i<n; i++){
+       x[i] = b[i]/a[i][i];
+       }
+       
+   while (tolcheck && flag<maxitr){
+       for (int i=0; i<n; i++){
+           xod[i] = x[i];
+           }
+           
+       for (int i=0; i<n; i++){
+           sum = b[i];
+           for (int j=0; j<n; j++){
+               if (i!=j){
+                   sum -= a[i][j] * xod[j];
+                   }
+               }
+               x[i] = sum/a[i][i];
+           }
+           tolcheck = false;
+           for (int i=0; i<n; i++){
+               if (fabs(x[i] - xod[i])>fabs(xod[i]*tol)){
+                   tolcheck = true;
+                   }
+               }
+         flag++;
+       }
+  cout<<tolcheck;
+}
